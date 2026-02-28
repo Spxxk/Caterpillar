@@ -2,152 +2,150 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>HammerGuard — Cat H95s Inspector</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>WheelGuard-982 — Cat Wheel Loader Inspector</title>
 <style>
 :root{
   --bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#e2e8f0;
   --muted:#94a3b8;--accent:#fbbf24;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;
-  --radius:10px;
+  --radius:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-     background:var(--bg);color:var(--text);min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+     background:var(--bg);color:var(--text);min-height:100dvh;
+     padding-bottom:calc(1rem + env(safe-area-inset-bottom))}
 
-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:1rem;
+header{background:var(--surface);border-bottom:3px solid var(--accent);padding:1rem 1.25rem;
        display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:50}
-header svg{width:28px;height:28px;fill:var(--accent)}
-header h1{font-size:1.15rem;font-weight:700;color:var(--accent)}
+header .logo{font-size:1.6rem}
+header h1{font-size:1.2rem;font-weight:700;color:var(--accent)}
 header .sub{font-size:.75rem;color:var(--muted);margin-left:auto;white-space:nowrap}
 
-main{max-width:600px;margin:0 auto;padding:1rem}
+main{max-width:640px;margin:0 auto;padding:1rem}
+section{background:var(--surface);border-radius:var(--radius);padding:1.15rem;margin-bottom:1rem}
+section h2{font-size:1rem;color:var(--accent);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
 
-section{background:var(--surface);border-radius:var(--radius);padding:1rem;margin-bottom:1rem}
-section h2{font-size:.95rem;color:var(--accent);margin-bottom:.75rem;
-            display:flex;align-items:center;gap:.4rem}
-
-.check-list{list-style:none}
-.check-list li{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;
-               border-bottom:1px solid var(--border);font-size:.9rem}
-.check-list li:last-child{border-bottom:none}
-.check-list input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0}
-.check-list .label{flex:1}
-.check-list .tag{font-size:.7rem;padding:2px 6px;border-radius:4px;
-                 background:var(--border);color:var(--muted)}
-
-.capture-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
-.btn{display:flex;align-items:center;justify-content:center;gap:.4rem;
-     border:none;border-radius:var(--radius);padding:.75rem 1rem;font-size:.9rem;
-     font-weight:600;cursor:pointer;transition:all .15s ease}
-.btn-photo{background:#1d4ed8;color:#fff}
-.btn-photo:active{background:#1e40af}
+.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;
+     border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;
+     cursor:pointer;transition:all .15s ease;min-height:56px;padding:.75rem 1.25rem;
+     touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn-pdf{background:#1d4ed8;color:#fff;width:100%;font-size:1.05rem}
+.btn-pdf:active{background:#1e40af;transform:scale(.98)}
+.btn-generate{background:var(--accent);color:#0f172a;width:100%;font-size:1.1rem;min-height:60px}
+.btn-generate:active{background:#d97706;transform:scale(.98)}
+.btn-generate:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-photo{background:#0d9488;color:#fff}
+.btn-photo:active{background:#0f766e}
 .btn-audio{background:#7c3aed;color:#fff}
 .btn-audio.recording{background:var(--red);animation:pulse 1s infinite}
-.btn-submit{background:var(--accent);color:#0f172a;width:100%;font-size:1rem;padding:.85rem}
-.btn-submit:active{background:#d97706}
-.btn-submit:disabled{opacity:.4;cursor:not-allowed}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.capture-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
+
+.status-bar{display:flex;align-items:center;gap:.5rem;padding:.6rem 0;font-size:.88rem;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+.file-name{margin-top:.5rem;padding:.5rem .75rem;background:var(--bg);border-radius:8px;
+           font-size:.85rem;color:var(--green);display:none;word-break:break-all}
+.file-name.show{display:block}
 
 .preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:.5rem;margin-top:.5rem}
 .preview-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:2px solid var(--border)}
-.preview-grid .audio-chip{background:var(--border);border-radius:6px;padding:.4rem;
-                           font-size:.7rem;color:var(--muted);text-align:center;
-                           display:flex;align-items:center;justify-content:center}
-
-.status-bar{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;font-size:.85rem;color:var(--muted)}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.preview-grid .chip{background:var(--border);border-radius:6px;padding:.5rem;font-size:.75rem;
+                    color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center}
 
 #result-area{display:none}
 #result-area.show{display:block}
 #result-area a{color:var(--accent);text-decoration:underline}
-.finding-card{background:var(--bg);border-radius:8px;padding:.75rem;margin-bottom:.5rem;
-              border-left:4px solid var(--border)}
-.finding-card .head{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600}
-.finding-card .head .badge{color:#fff;padding:1px 6px;border-radius:3px;font-size:.75rem;font-weight:700}
-.finding-card p{font-size:.8rem;color:var(--muted);margin-top:.3rem}
 
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);
+.finding-card{background:var(--bg);border-radius:10px;padding:.85rem 1rem;margin-bottom:.65rem;
+              border-left:4px solid var(--border)}
+.finding-card .head{display:flex;align-items:center;gap:.5rem;font-size:.9rem;font-weight:600;flex-wrap:wrap}
+.finding-card .head .badge{color:#fff;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:700}
+.finding-card .desc{font-size:.83rem;color:var(--muted);margin-top:.3rem}
+.finding-card .actions{margin-top:.4rem;font-size:.8rem;color:#94a3b8}
+.finding-card .actions li{margin-bottom:.15rem}
+
+.links-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.links-row a{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .85rem;
+             border-radius:8px;font-size:.85rem;font-weight:600;text-decoration:none;
+             background:var(--bg);color:var(--accent);border:1px solid var(--accent);min-height:44px}
+.links-row a:active{background:var(--accent);color:var(--bg)}
+
+.spinner{display:inline-block;width:20px;height:20px;border:2.5px solid var(--border);
          border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+.triage-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;
+            padding:.65rem .85rem;margin-top:.5rem}
+.triage-box h4{font-size:.85rem;color:var(--accent);margin-bottom:.3rem}
+
+input[type=file]{display:none}
 </style>
 </head>
 <body>
 
 <header>
-  <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-  <h1>HammerGuard</h1>
-  <span class="sub">Cat H95s</span>
+  <span class="logo">&#128668;</span>
+  <h1>WheelGuard-982</h1>
+  <span class="sub">Cat 982 Wheel Loader</span>
 </header>
 
 <main>
 
-<!-- Checklist -->
+<!-- Step 1: Upload PDF -->
 <section>
-  <h2>&#9745; Inspection Checklist</h2>
-  <ul class="check-list" id="checklist">
-    <li>
-      <input type="checkbox" data-check="grease_tool"/>
-      <span class="label">Grease tool / auto-lube</span>
-      <span class="tag">Daily</span>
-    </li>
-    <li>
-      <input type="checkbox" data-check="inspect_cracks_burrs"/>
-      <span class="label">Inspect tool — cracks &amp; burrs</span>
-      <span class="tag">Daily</span>
-    </li>
-    <li>
-      <input type="checkbox" data-check="inspect_pins"/>
-      <span class="label">Inspect retaining pins</span>
-      <span class="tag">Weekly</span>
-    </li>
-    <li>
-      <input type="checkbox" data-check="inspect_bushings"/>
-      <span class="label">Inspect bushings</span>
-      <span class="tag">Weekly</span>
-    </li>
-    <li>
-      <input type="checkbox" data-check="check_jumper_lines"/>
-      <span class="label">Check jumper lines / leaks</span>
-      <span class="tag">Daily</span>
-    </li>
-    <li>
-      <input type="checkbox" data-check="note_blank_firing"/>
-      <span class="label">Note blank firing</span>
-      <span class="tag">Per-use</span>
-    </li>
-  </ul>
+  <h2>&#128196; Step 1 — Upload Inspection PDF</h2>
+  <button class="btn btn-pdf" id="btn-pdf" onclick="document.getElementById('file-pdf').click()">
+    Upload Inspection Report (PDF)
+  </button>
+  <input type="file" id="file-pdf" accept=".pdf,application/pdf" onchange="handlePdf(this)"/>
+  <div class="file-name" id="pdf-name"></div>
+  <div class="status-bar" id="status-pdf">
+    <span class="dot" style="background:var(--muted)"></span> No PDF uploaded yet
+  </div>
 </section>
 
-<!-- Evidence capture -->
+<!-- Step 2: Optional evidence -->
 <section>
-  <h2>&#128247; Capture Evidence</h2>
+  <h2>&#128247; Step 2 — Additional Evidence (Optional)</h2>
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem">
+    Capture photos or audio to supplement the PDF report.
+    For transmission noise triage, record 5–10 seconds near the transmission housing.
+  </p>
   <div class="capture-row">
-    <button class="btn btn-photo" id="btn-photo" onclick="capturePhoto()">
+    <button class="btn btn-photo" onclick="document.getElementById('file-photo').click()">
       &#128248; Capture Photo
     </button>
     <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()">
-      &#127908; Record 5s Audio
+      &#127908; Record Audio
     </button>
   </div>
+  <input type="file" id="file-photo" accept="image/*" capture="environment" onchange="handlePhoto(this)"/>
   <div class="preview-grid" id="previews"></div>
-  <div class="status-bar" id="status">
-    <span class="dot" style="background:var(--green)"></span> Ready — no evidence yet
+  <div class="status-bar" id="status-evidence">
+    <span class="dot" style="background:var(--muted)"></span> No additional evidence
   </div>
-  <input type="file" id="file-photo" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)"/>
 </section>
 
-<!-- Submit -->
+<!-- Step 3: Generate -->
 <section>
-  <button class="btn btn-submit" id="btn-submit" onclick="submitInspection()">
-    Submit Inspection
+  <h2>&#9881; Step 3 — Generate Report</h2>
+  <button class="btn btn-generate" id="btn-generate" onclick="generateReport()" disabled>
+    Generate Inspection Report
   </button>
 </section>
 
 <!-- Results -->
 <section id="result-area">
-  <h2>&#128203; Findings</h2>
+  <h2>&#128203; Analysis Results</h2>
+
+  <div id="meta-summary"></div>
+
+  <h3 style="color:var(--accent);font-size:.95rem;margin:1rem 0 .5rem">Top Findings</h3>
   <div id="findings-list"></div>
-  <p style="margin-top:.75rem" id="report-link"></p>
+
+  <div class="links-row" id="report-links"></div>
 </section>
 
 </main>
@@ -155,157 +153,211 @@ section h2{font-size:.95rem;color:var(--accent);margin-bottom:.75rem;
 <script>
 const API = location.origin;
 let sessionId = "";
-let uploads = [];
+let pdfUploaded = false;
 let mediaRecorder = null;
 let audioChunks = [];
 
-function setStatus(msg, color){
-  const s = document.getElementById("status");
-  s.innerHTML = `<span class="dot" style="background:var(--${color})"></span> ${msg}`;
+function setStatus(id, msg, color) {
+  const el = document.getElementById(id);
+  el.innerHTML = `<span class="dot" style="background:var(--${color})"></span> ${msg}`;
 }
 
-async function uploadFile(blob, filename){
+async function uploadFile(blob, filename, endpoint="/upload") {
   const fd = new FormData();
   fd.append("file", blob, filename);
   fd.append("session_id", sessionId);
-  const r = await fetch(`${API}/upload`, {method:"POST", body:fd});
+  const r = await fetch(`${API}${endpoint}`, {method:"POST", body:fd});
+  if (!r.ok) throw new Error(`Upload failed: ${r.status}`);
   const j = await r.json();
-  if(!sessionId) sessionId = j.session_id;
-  uploads.push(j);
+  if (!sessionId) sessionId = j.session_id;
   return j;
 }
 
-function capturePhoto(){
-  document.getElementById("file-photo").click();
-}
-
-async function handlePhoto(input){
-  if(!input.files.length) return;
+async function handlePdf(input) {
+  if (!input.files.length) return;
   const file = input.files[0];
-  setStatus("Uploading photo…", "yellow");
-  try{
-    const res = await uploadFile(file, file.name);
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-    document.getElementById("previews").appendChild(img);
-    setStatus(`Photo uploaded (${res.sha256.slice(0,8)}…)`, "green");
-  }catch(e){
-    setStatus("Photo upload failed", "red");
+  if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
+
+  setStatus("status-pdf", "Uploading PDF…", "yellow");
+  try {
+    const res = await uploadFile(file, file.name, "/upload_pdf");
+    pdfUploaded = true;
+    document.getElementById("pdf-name").textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB) — SHA-256: ${res.sha256.slice(0,16)}…`;
+    document.getElementById("pdf-name").classList.add("show");
+    document.getElementById("btn-generate").disabled = false;
+    setStatus("status-pdf", "PDF uploaded and hashed", "green");
+  } catch(e) {
+    setStatus("status-pdf", "Upload failed — try again", "red");
     console.error(e);
   }
   input.value = "";
 }
 
-function toggleAudio(){
+async function handlePhoto(input) {
+  if (!input.files.length) return;
+  const file = input.files[0];
+  if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
+
+  setStatus("status-evidence", "Uploading photo…", "yellow");
+  try {
+    const res = await uploadFile(file, file.name);
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    document.getElementById("previews").appendChild(img);
+    setStatus("status-evidence", `Photo uploaded (${res.sha256.slice(0,8)}…)`, "green");
+  } catch(e) {
+    setStatus("status-evidence", "Photo upload failed", "red");
+    console.error(e);
+  }
+  input.value = "";
+}
+
+function toggleAudio() {
   const btn = document.getElementById("btn-audio");
-  if(mediaRecorder && mediaRecorder.state === "recording"){
+  if (mediaRecorder && mediaRecorder.state === "recording") {
     mediaRecorder.stop();
     return;
   }
   navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
-    mediaRecorder = new MediaRecorder(stream, {mimeType: MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4"});
+    const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
+    mediaRecorder = new MediaRecorder(stream, {mimeType});
     audioChunks = [];
     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.onstop = async () => {
       stream.getTracks().forEach(t => t.stop());
       btn.classList.remove("recording");
-      btn.innerHTML = "&#127908; Record 5s Audio";
-      const blob = new Blob(audioChunks, {type: mediaRecorder.mimeType});
-      const ext = mediaRecorder.mimeType.includes("webm") ? ".webm" : ".m4a";
-      setStatus("Uploading audio…", "yellow");
-      try{
-        const res = await uploadFile(blob, `audio_${Date.now()}${ext}`);
+      btn.innerHTML = "&#127908; Record Audio";
+      const blob = new Blob(audioChunks, {type: mimeType});
+      const ext = mimeType.includes("webm") ? ".webm" : ".m4a";
+      if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
+      setStatus("status-evidence", "Uploading audio…", "yellow");
+      try {
+        const res = await uploadFile(blob, `transmission_audio_${Date.now()}${ext}`);
         const chip = document.createElement("div");
-        chip.className = "audio-chip";
-        chip.textContent = `🔊 ${ext}`;
+        chip.className = "chip";
+        chip.textContent = `Audio ${ext}`;
         document.getElementById("previews").appendChild(chip);
-        setStatus(`Audio uploaded (${res.sha256.slice(0,8)}…)`, "green");
-      }catch(e){
-        setStatus("Audio upload failed", "red");
+        setStatus("status-evidence", `Audio uploaded (${res.sha256.slice(0,8)}…)`, "green");
+      } catch(e) {
+        setStatus("status-evidence", "Audio upload failed", "red");
         console.error(e);
       }
     };
     mediaRecorder.start();
     btn.classList.add("recording");
-    btn.innerHTML = "&#9899; Recording…";
+    btn.innerHTML = "&#9899; Recording… (tap to stop)";
     setTimeout(() => {
-      if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
-    }, 5000);
+      if (mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
+    }, 10000);
   }).catch(e => {
-    setStatus("Microphone access denied", "red");
+    setStatus("status-evidence", "Microphone access denied", "red");
     console.error(e);
   });
 }
 
-async function submitInspection(){
-  const btn = document.getElementById("btn-submit");
+const STATUS_COLORS = {R:"var(--red)", Y:"var(--yellow)", G:"var(--green)"};
+
+async function generateReport() {
+  const btn = document.getElementById("btn-generate");
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Analysing…';
+  btn.innerHTML = '<span class="spinner"></span> Analysing PDF…';
 
-  const checklist = {};
-  document.querySelectorAll("#checklist input[type=checkbox]").forEach(cb => {
-    checklist[cb.dataset.check] = cb.checked;
-  });
-
-  if(!sessionId){
-    sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
-  }
-
-  try{
-    const r = await fetch(`${API}/infer`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({session_id: sessionId, checklist}),
+  try {
+    const r = await fetch(`${API}/infer_from_pdf`, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({session_id: sessionId}),
     });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.detail || `Server error: ${r.status}`);
+    }
     const data = await r.json();
     showResults(data);
-  }catch(e){
-    setStatus("Inference failed — check server logs", "red");
+  } catch(e) {
+    setStatus("status-pdf", `Analysis failed: ${e.message}`, "red");
     console.error(e);
-  }finally{
+  } finally {
     btn.disabled = false;
-    btn.innerHTML = "Submit Inspection";
+    btn.innerHTML = "Generate Inspection Report";
   }
 }
 
-const STATUS_COLORS = {R:"var(--red)",Y:"var(--yellow)",G:"var(--green)"};
-const STATUS_NAMES = {R:"RED",Y:"YEL",G:"GRN"};
-
-function showResults(data){
+function showResults(data) {
   const area = document.getElementById("result-area");
   area.classList.add("show");
+
+  // Meta summary
+  const meta = data.meta || {};
+  document.getElementById("meta-summary").innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;font-size:.85rem;
+                background:var(--bg);padding:.75rem;border-radius:8px;margin-bottom:.5rem">
+      <span style="color:var(--muted)">Model</span><strong>${meta.model || "982"}</strong>
+      <span style="color:var(--muted)">Serial</span><span>${meta.serial || "—"}</span>
+      <span style="color:var(--muted)">SMU</span><span>${meta.smu_hours || 0} hours</span>
+      <span style="color:var(--muted)">Inspector</span><span>${meta.inspector || "—"}</span>
+      <span style="color:var(--muted)">Location</span><span>${meta.location || "—"}</span>
+      <span style="color:var(--muted)">Completed</span><span>${meta.completed_on || "—"}</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--muted)">
+      ${data.checklist_items?.length || 0} checklist items parsed &middot;
+      ${data.findings?.length || 0} actionable findings
+      ${data.parse_errors?.length ? ` &middot; ${data.parse_errors.length} parse warning(s)` : ""}
+    </p>`;
+
+  // Findings (RED first)
   const list = document.getElementById("findings-list");
   list.innerHTML = "";
-
-  if(!data.findings || !data.findings.length){
-    list.innerHTML = "<p style='color:var(--muted)'>No automated findings. Manual review recommended.</p>";
+  const findings = data.findings || [];
+  if (!findings.length) {
+    list.innerHTML = '<p style="color:var(--muted)">All checks passed — no actionable findings.</p>';
   } else {
-    data.findings.forEach(f => {
-      const c = STATUS_COLORS[f.status] || "var(--border)";
+    findings.forEach(f => {
+      const c = STATUS_COLORS[f.severity] || "var(--border)";
       const card = document.createElement("div");
       card.className = "finding-card";
       card.style.borderLeftColor = c;
+
+      let actionsHtml = "";
+      if (f.recommended_actions && f.recommended_actions.length) {
+        actionsHtml = '<ul class="actions">' + f.recommended_actions.map(a => `<li>${a}</li>`).join("") + "</ul>";
+      }
+
+      let partsHtml = "";
+      if (f.parts_search_terms && f.parts_search_terms.length) {
+        partsHtml = '<div style="margin-top:.3rem">' + f.parts_search_terms.map(t => {
+          const url = `https://parts.cat.com/en/catcorp/search?q=${encodeURIComponent(t)}`;
+          return `<a href="${url}" target="_blank" style="font-size:.78rem;color:var(--accent);
+                   margin-right:.5rem;text-decoration:underline">${t}</a>`;
+        }).join("") + '</div>';
+      }
+
       card.innerHTML = `
         <div class="head">
-          <span class="badge" style="background:${c}">${f.status}</span>
-          <span>${f.component} — ${f.check}</span>
+          <span class="badge" style="background:${c}">${f.severity}</span>
+          <span>${f.title}</span>
         </div>
-        <p>${f.notes}</p>
-        ${f.suggested_parts.length ? `<p>Parts: ${f.suggested_parts.map(p=>`<code>${p}</code>`).join(", ")}</p>` : ""}
-      `;
+        <p class="desc">${f.description}</p>
+        ${actionsHtml}
+        ${partsHtml}`;
       list.appendChild(card);
     });
   }
 
-  const link = document.getElementById("report-link");
-  if(data.report_url){
-    link.innerHTML = `<a href="${data.report_url}" target="_blank">&#128196; Open full offline report</a>
-      &nbsp;|&nbsp;
+  // Report links
+  const links = document.getElementById("report-links");
+  links.innerHTML = "";
+  if (data.report_url) {
+    links.innerHTML = `
+      <a href="${data.report_url}" target="_blank">&#128196; Full Report</a>
       <a href="/evidence/${data.session_id}/findings.json" target="_blank">&#128203; findings.json</a>
-      &nbsp;|&nbsp;
-      <a href="/evidence/${data.session_id}/manifest.json" target="_blank">&#128194; manifest.json</a>`;
+      <a href="/evidence/${data.session_id}/manifest.json" target="_blank">&#128194; manifest.json</a>
+      <a href="/evidence/${data.session_id}/report.pdf" target="_blank">&#128462; Original PDF</a>`;
   }
-  setStatus(`Analysis complete — ${data.findings.length} finding(s)`, "green");
+
+  setStatus("status-pdf",
+    `Analysis complete — ${findings.filter(f=>f.severity==="R").length} critical, ${findings.filter(f=>f.severity==="Y").length} monitor`,
+    findings.some(f=>f.severity==="R") ? "red" : findings.some(f=>f.severity==="Y") ? "yellow" : "green");
   area.scrollIntoView({behavior:"smooth"});
 }
 </script>

@@ -1,115 +1,103 @@
-# HammerGuard — Cat H95s Hydraulic Hammer Inspector
+# WheelGuard-982 + HammerGuard
 
-Minimal AI-assisted inspection prototype for Caterpillar H95s hydraulic hammers.
-Captures photo/audio evidence, runs SOTA vision + audio + LLM analysis, and generates
-an offline HTML report with hashed evidence bundles.
+AI-assisted inspection triage for Caterpillar heavy equipment.
+
+- **WheelGuard-982** — Upload a Cat 982 Wheel Loader inspection PDF, get structured findings with failure-mode triage cards, action plans, and parts.cat.com search links.
+- **HammerGuard** — Photo/audio capture pipeline for Cat H95s hydraulic hammer inspections.
 
 ## Quick Start
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-
-# Minimal (rule-based fallback, no large model downloads)
 pip install -r requirements.txt
-
-# Start the server
 python server.py
-# → http://localhost:8000
 ```
 
-Open `http://localhost:8000` on a phone or browser. Walk through the checklist,
-capture a photo and/or record 5 seconds of audio, then tap **Submit Inspection**.
+Open **http://localhost:8000**, upload an inspection PDF, and tap **Generate Inspection Report**.
 
 ## Architecture
 
 ```
-static/index.html     Mobile-first SPA (checklist + capture + results)
-server.py             FastAPI — POST /upload, POST /infer, static serving
+server.py                FastAPI backend (6 endpoints)
+schemas.py               Pydantic models + 982 parts mapping
+report.py                Offline HTML report generators (WheelGuard + HammerGuard)
+static/index.html        Mobile-first frontend (PDF upload + evidence capture)
 models/
-  vision.py           GroundingDINO → YOLOv8 → manual fallback
-  audio.py            RNNoise denoise → Whisper-tiny ASR + BPM estimation
-  llm.py              Mistral 7B tool-call → OpenAI → rule-based fallback
-schemas.py            Pydantic: CreateFindingSchema, manifest, etc.
-report.py             Self-contained offline HTML report generator
+  pdf_parse.py           PDF → structured sections + checklist items + statuses
+  vision.py              GroundingDINO → YOLO → manual (HammerGuard path)
+  audio.py               RNNoise → Whisper-tiny + BPM (HammerGuard path)
+  llm.py                 Mistral 7B → OpenAI → rule-based (HammerGuard path)
 data/
-  parts_snapshot.json Pre-built Cat H95s parts catalog (13 components)
-  demo/               Sample images + audio for offline testing
-evidence/{session}/   Runtime evidence storage
-  manifest.json       SHA-256 hashed file manifest
-  findings.json       Structured inspection findings
-  report.html         Offline HTML report
+  parts_snapshot.json    Cat H95s parts catalog
+  demo/                  Synthetic test media
+evidence/{session}/      Runtime output per inspection
+  report.pdf             Uploaded inspection PDF
+  manifest.json          SHA-256 hashed evidence inventory
+  findings.json          Structured findings array
+  report.html            Self-contained offline report
 ```
 
-## API
+## API Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
 | `/` | GET | Serve frontend |
-| `/upload` | POST | Upload image/audio → saves to evidence, returns SHA-256 |
-| `/infer` | POST | Run vision + audio + LLM pipeline → findings + report |
+| `/upload` | POST | Upload image/audio → SHA-256 hash → manifest |
+| `/upload_pdf` | POST | Upload inspection PDF → store as `report.pdf` + hash |
+| `/infer_from_pdf` | POST | Parse PDF → findings + report.html |
+| `/infer` | POST | Multimodal inference (HammerGuard path) |
 | `/evidence/{session}/{file}` | GET | Serve evidence files |
-| `/data/parts_snapshot.json` | GET | Parts catalog |
 
-### POST /upload
+## WheelGuard-982 Pipeline
 
-```
-Content-Type: multipart/form-data
-Fields: file (binary), session_id (string, optional)
-Response: { filename, sha256, session_id }
-```
-
-### POST /infer
-
-```json
-{
-  "session_id": "abc123",
-  "checklist": {
-    "grease_tool": true,
-    "inspect_cracks_burrs": true,
-    "inspect_pins": false,
-    "inspect_bushings": true,
-    "check_jumper_lines": false,
-    "note_blank_firing": true
-  }
-}
-```
-
-Response: `{ session_id, findings: [...], report_url }`
+1. **PDF Upload** — Stored as evidence, SHA-256 hashed, appended to manifest
+2. **PDF Parsing** (`models/pdf_parse.py`) — Extracts:
+   - Header metadata (model, serial, SMU, inspector, customer, location, etc.)
+   - 4 inspection sections: From the Ground, Engine Compartment, Outside Cab, Inside Cab
+   - Per-item status normalization: PASS/NORMAL → GREEN, MONITOR → YELLOW, FAIL → RED
+3. **Finding Generation** — Deterministic triage logic:
+   - Transmission FAIL → RED with 6-step noise triage (including audio capture prompt)
+   - Radiator FAIL → RED with cooling performance checklist
+   - MONITOR items → YELLOW with monitoring + parts suggestions
+4. **Report Generation** — Self-contained offline HTML with:
+   - Executive summary (RED first, then YELLOW)
+   - Per-section checklist tables
+   - Failure mode cards with triage workflows
+   - Action plan with prioritized tasks
+   - Parts.cat.com search links with `confidence: demo` badges
+   - Evidence manifest with SHA-256 hashes
 
 ## Finding Schema
 
 ```json
 {
-  "component": "bushing",
-  "check": "inspect_bushings",
-  "status": "Y",
-  "evidence_ids": ["sha256..."],
-  "notes": "Scoring visible on upper bushing",
-  "confidence": 0.72,
-  "suggested_parts": ["340-5407"]
+  "id": "a1b2c3d4e5f6",
+  "severity": "R",
+  "title": "1.7 Transmission and Transfer Gears",
+  "description": "CRITICAL: Abnormal noise detected...",
+  "evidence_files": ["9508d489320b..."],
+  "recommended_actions": [
+    "Do NOT operate until inspected",
+    "Check transmission fluid level and condition",
+    "Record 5-10 second audio clip of noise"
+  ],
+  "parts_search_terms": ["982 transmission filter", "982 transmission oil TO-4"],
+  "section": "FROM THE GROUND",
+  "checklist_code": "1.7"
 }
 ```
 
-## Model Cascade
+## 982 Parts Mapping (Demo)
 
-Each model tier falls through gracefully:
+The system maps findings to parts.cat.com search URLs for:
+duo-cone seal, radiator core, air filter, transmission filter/oil,
+differential oil, engine coolant, cutting edge, bucket tips, fan belt,
+cab air filter, engine oil filter, fuel filter.
 
-| Task | Primary | Fallback | Manual |
-|---|---|---|---|
-| Vision | GroundingDINO (Apache-2.0) | YOLOv8-nano (AGPL) | Empty detections → manual tag |
-| Audio | RNNoise + Whisper-tiny | Whisper-tiny only | No transcript |
-| LLM | Mistral 7B Instruct v0.3 | OpenAI gpt-4.1-mini | Rule-based mapping |
+All links include a `confidence: demo` badge — these are search queries, not verified part numbers.
 
-To use OpenAI fallback, set `OPENAI_API_KEY` environment variable.
+## Offline-First
 
-## Offline Demo
-
-Demo fixtures are pre-generated in `data/demo/`. The system works fully offline
-with the rule-based fallback — no model downloads required for basic operation.
-Evidence bundles always include SHA-256 hashes regardless of which models ran.
-
-## H95s Specs
-
-- Operating frequency: 700–1260 bpm
-- Sound level: ~124 dB
-- Product page: https://parts.cat.com/en/catcorp/product/561-2555
+The entire pipeline works with **zero model downloads**. The PDF parsing and
+finding generation are fully deterministic. Evidence bundles always include
+SHA-256 hashes regardless of which AI models are available.
