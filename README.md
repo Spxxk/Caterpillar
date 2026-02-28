@@ -1,7 +1,7 @@
 # HammerGuard — Cat H95s Hydraulic Hammer Inspector
 
 Minimal AI-assisted inspection prototype for Caterpillar H95s hydraulic hammers.
-Captures photo/audio evidence, runs vision + audio + LLM analysis, and generates
+Captures photo/audio evidence, runs SOTA vision + audio + LLM analysis, and generates
 an offline HTML report with hashed evidence bundles.
 
 ## Quick Start
