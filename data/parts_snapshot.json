@@ -1,0 +1,93 @@
+[
+  {
+    "part_no": "561-2555",
+    "name": "H95s Hydraulic Hammer",
+    "category": "hammer",
+    "image_url": "https://parts.cat.com/wcs/resources/images/561-2555.jpg",
+    "fitment_notes": "Cat H95s hammer assembly. Operating range 700–1260 bpm, ~124 dB."
+  },
+  {
+    "part_no": "379-7650",
+    "name": "Tool — Moil Point",
+    "category": "tool",
+    "image_url": "https://parts.cat.com/wcs/resources/images/379-7650.jpg",
+    "fitment_notes": "Moil-point tool bit for H95s. Replace when mushroomed >2 mm or cracked."
+  },
+  {
+    "part_no": "379-7651",
+    "name": "Tool — Chisel",
+    "category": "tool",
+    "image_url": "https://parts.cat.com/wcs/resources/images/379-7651.jpg",
+    "fitment_notes": "Chisel tool bit for H95s. Replace when edge worn >5 mm or chipped."
+  },
+  {
+    "part_no": "379-7652",
+    "name": "Tool — Blunt",
+    "category": "tool",
+    "image_url": "https://parts.cat.com/wcs/resources/images/379-7652.jpg",
+    "fitment_notes": "Blunt tool bit for H95s. Inspect for mushrooming and cracks every 50 hrs."
+  },
+  {
+    "part_no": "340-5407",
+    "name": "Upper Bushing",
+    "category": "bushing",
+    "image_url": "https://parts.cat.com/wcs/resources/images/340-5407.jpg",
+    "fitment_notes": "Upper tool bushing for H95s. Replace when clearance exceeds 2 mm or scoring visible."
+  },
+  {
+    "part_no": "340-5408",
+    "name": "Lower Bushing",
+    "category": "bushing",
+    "image_url": "https://parts.cat.com/wcs/resources/images/340-5408.jpg",
+    "fitment_notes": "Lower tool bushing for H95s. Replace when clearance exceeds 2 mm or scoring visible."
+  },
+  {
+    "part_no": "286-2092",
+    "name": "Retaining Pin",
+    "category": "pin",
+    "image_url": "https://parts.cat.com/wcs/resources/images/286-2092.jpg",
+    "fitment_notes": "Tool retaining pin for H95s. Check for bending, galling, or mushrooming. Replace if worn >1 mm."
+  },
+  {
+    "part_no": "286-2093",
+    "name": "Retaining Pin (Backup)",
+    "category": "pin",
+    "image_url": "https://parts.cat.com/wcs/resources/images/286-2093.jpg",
+    "fitment_notes": "Secondary retaining pin for H95s. Inspect at same interval as primary pin."
+  },
+  {
+    "part_no": "195-7895",
+    "name": "Hydraulic Hose — Pressure",
+    "category": "hose",
+    "image_url": "https://parts.cat.com/wcs/resources/images/195-7895.jpg",
+    "fitment_notes": "High-pressure jumper line for H95s. Check for abrasion, bulging, weeping at fittings."
+  },
+  {
+    "part_no": "195-7896",
+    "name": "Hydraulic Hose — Return",
+    "category": "hose",
+    "image_url": "https://parts.cat.com/wcs/resources/images/195-7896.jpg",
+    "fitment_notes": "Return-line jumper hose for H95s. Replace at any sign of leak or fitting damage."
+  },
+  {
+    "part_no": "270-1535",
+    "name": "Grease Cartridge — Auto-Lube",
+    "category": "grease",
+    "image_url": "https://parts.cat.com/wcs/resources/images/270-1535.jpg",
+    "fitment_notes": "Auto-lube grease cartridge for H95s. Verify cartridge is not empty; grease must reach tool bushing."
+  },
+  {
+    "part_no": "228-1796",
+    "name": "Seal Kit",
+    "category": "seal",
+    "image_url": "https://parts.cat.com/wcs/resources/images/228-1796.jpg",
+    "fitment_notes": "Complete seal kit for H95s. Replace seals at 2000-hr overhaul or if external leaks present."
+  },
+  {
+    "part_no": "457-1245",
+    "name": "Through-Bolt Kit",
+    "category": "bolt",
+    "image_url": "https://parts.cat.com/wcs/resources/images/457-1245.jpg",
+    "fitment_notes": "Through-bolt torque kit for H95s. Re-torque every 100 hours per maintenance schedule."
+  }
+]

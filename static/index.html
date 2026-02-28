@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>HammerGuard — Cat H95s Inspector</title>
+<style>
+:root{
+  --bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#e2e8f0;
+  --muted:#94a3b8;--accent:#fbbf24;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+     background:var(--bg);color:var(--text);min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+
+header{background:var(--surface);border-bottom:2px solid var(--accent);padding:1rem;
+       display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:50}
+header svg{width:28px;height:28px;fill:var(--accent)}
+header h1{font-size:1.15rem;font-weight:700;color:var(--accent)}
+header .sub{font-size:.75rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+main{max-width:600px;margin:0 auto;padding:1rem}
+
+section{background:var(--surface);border-radius:var(--radius);padding:1rem;margin-bottom:1rem}
+section h2{font-size:.95rem;color:var(--accent);margin-bottom:.75rem;
+            display:flex;align-items:center;gap:.4rem}
+
+.check-list{list-style:none}
+.check-list li{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;
+               border-bottom:1px solid var(--border);font-size:.9rem}
+.check-list li:last-child{border-bottom:none}
+.check-list input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0}
+.check-list .label{flex:1}
+.check-list .tag{font-size:.7rem;padding:2px 6px;border-radius:4px;
+                 background:var(--border);color:var(--muted)}
+
+.capture-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+.btn{display:flex;align-items:center;justify-content:center;gap:.4rem;
+     border:none;border-radius:var(--radius);padding:.75rem 1rem;font-size:.9rem;
+     font-weight:600;cursor:pointer;transition:all .15s ease}
+.btn-photo{background:#1d4ed8;color:#fff}
+.btn-photo:active{background:#1e40af}
+.btn-audio{background:#7c3aed;color:#fff}
+.btn-audio.recording{background:var(--red);animation:pulse 1s infinite}
+.btn-submit{background:var(--accent);color:#0f172a;width:100%;font-size:1rem;padding:.85rem}
+.btn-submit:active{background:#d97706}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:.5rem;margin-top:.5rem}
+.preview-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:2px solid var(--border)}
+.preview-grid .audio-chip{background:var(--border);border-radius:6px;padding:.4rem;
+                           font-size:.7rem;color:var(--muted);text-align:center;
+                           display:flex;align-items:center;justify-content:center}
+
+.status-bar{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;font-size:.85rem;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+#result-area{display:none}
+#result-area.show{display:block}
+#result-area a{color:var(--accent);text-decoration:underline}
+.finding-card{background:var(--bg);border-radius:8px;padding:.75rem;margin-bottom:.5rem;
+              border-left:4px solid var(--border)}
+.finding-card .head{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600}
+.finding-card .head .badge{color:#fff;padding:1px 6px;border-radius:3px;font-size:.75rem;font-weight:700}
+.finding-card p{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);
+         border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<header>
+  <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+  <h1>HammerGuard</h1>
+  <span class="sub">Cat H95s</span>
+</header>
+
+<main>
+
+<!-- Checklist -->
+<section>
+  <h2>&#9745; Inspection Checklist</h2>
+  <ul class="check-list" id="checklist">
+    <li>
+      <input type="checkbox" data-check="grease_tool"/>
+      <span class="label">Grease tool / auto-lube</span>
+      <span class="tag">Daily</span>
+    </li>
+    <li>
+      <input type="checkbox" data-check="inspect_cracks_burrs"/>
+      <span class="label">Inspect tool — cracks &amp; burrs</span>
+      <span class="tag">Daily</span>
+    </li>
+    <li>
+      <input type="checkbox" data-check="inspect_pins"/>
+      <span class="label">Inspect retaining pins</span>
+      <span class="tag">Weekly</span>
+    </li>
+    <li>
+      <input type="checkbox" data-check="inspect_bushings"/>
+      <span class="label">Inspect bushings</span>
+      <span class="tag">Weekly</span>
+    </li>
+    <li>
+      <input type="checkbox" data-check="check_jumper_lines"/>
+      <span class="label">Check jumper lines / leaks</span>
+      <span class="tag">Daily</span>
+    </li>
+    <li>
+      <input type="checkbox" data-check="note_blank_firing"/>
+      <span class="label">Note blank firing</span>
+      <span class="tag">Per-use</span>
+    </li>
+  </ul>
+</section>
+
+<!-- Evidence capture -->
+<section>
+  <h2>&#128247; Capture Evidence</h2>
+  <div class="capture-row">
+    <button class="btn btn-photo" id="btn-photo" onclick="capturePhoto()">
+      &#128248; Capture Photo
+    </button>
+    <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()">
+      &#127908; Record 5s Audio
+    </button>
+  </div>
+  <div class="preview-grid" id="previews"></div>
+  <div class="status-bar" id="status">
+    <span class="dot" style="background:var(--green)"></span> Ready — no evidence yet
+  </div>
+  <input type="file" id="file-photo" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)"/>
+</section>
+
+<!-- Submit -->
+<section>
+  <button class="btn btn-submit" id="btn-submit" onclick="submitInspection()">
+    Submit Inspection
+  </button>
+</section>
+
+<!-- Results -->
+<section id="result-area">
+  <h2>&#128203; Findings</h2>
+  <div id="findings-list"></div>
+  <p style="margin-top:.75rem" id="report-link"></p>
+</section>
+
+</main>
+
+<script>
+const API = location.origin;
+let sessionId = "";
+let uploads = [];
+let mediaRecorder = null;
+let audioChunks = [];
+
+function setStatus(msg, color){
+  const s = document.getElementById("status");
+  s.innerHTML = `<span class="dot" style="background:var(--${color})"></span> ${msg}`;
+}
+
+async function uploadFile(blob, filename){
+  const fd = new FormData();
+  fd.append("file", blob, filename);
+  fd.append("session_id", sessionId);
+  const r = await fetch(`${API}/upload`, {method:"POST", body:fd});
+  const j = await r.json();
+  if(!sessionId) sessionId = j.session_id;
+  uploads.push(j);
+  return j;
+}
+
+function capturePhoto(){
+  document.getElementById("file-photo").click();
+}
+
+async function handlePhoto(input){
+  if(!input.files.length) return;
+  const file = input.files[0];
+  setStatus("Uploading photo…", "yellow");
+  try{
+    const res = await uploadFile(file, file.name);
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    document.getElementById("previews").appendChild(img);
+    setStatus(`Photo uploaded (${res.sha256.slice(0,8)}…)`, "green");
+  }catch(e){
+    setStatus("Photo upload failed", "red");
+    console.error(e);
+  }
+  input.value = "";
+}
+
+function toggleAudio(){
+  const btn = document.getElementById("btn-audio");
+  if(mediaRecorder && mediaRecorder.state === "recording"){
+    mediaRecorder.stop();
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
+    mediaRecorder = new MediaRecorder(stream, {mimeType: MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4"});
+    audioChunks = [];
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      btn.classList.remove("recording");
+      btn.innerHTML = "&#127908; Record 5s Audio";
+      const blob = new Blob(audioChunks, {type: mediaRecorder.mimeType});
+      const ext = mediaRecorder.mimeType.includes("webm") ? ".webm" : ".m4a";
+      setStatus("Uploading audio…", "yellow");
+      try{
+        const res = await uploadFile(blob, `audio_${Date.now()}${ext}`);
+        const chip = document.createElement("div");
+        chip.className = "audio-chip";
+        chip.textContent = `🔊 ${ext}`;
+        document.getElementById("previews").appendChild(chip);
+        setStatus(`Audio uploaded (${res.sha256.slice(0,8)}…)`, "green");
+      }catch(e){
+        setStatus("Audio upload failed", "red");
+        console.error(e);
+      }
+    };
+    mediaRecorder.start();
+    btn.classList.add("recording");
+    btn.innerHTML = "&#9899; Recording…";
+    setTimeout(() => {
+      if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
+    }, 5000);
+  }).catch(e => {
+    setStatus("Microphone access denied", "red");
+    console.error(e);
+  });
+}
+
+async function submitInspection(){
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Analysing…';
+
+  const checklist = {};
+  document.querySelectorAll("#checklist input[type=checkbox]").forEach(cb => {
+    checklist[cb.dataset.check] = cb.checked;
+  });
+
+  if(!sessionId){
+    sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
+  }
+
+  try{
+    const r = await fetch(`${API}/infer`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({session_id: sessionId, checklist}),
+    });
+    const data = await r.json();
+    showResults(data);
+  }catch(e){
+    setStatus("Inference failed — check server logs", "red");
+    console.error(e);
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = "Submit Inspection";
+  }
+}
+
+const STATUS_COLORS = {R:"var(--red)",Y:"var(--yellow)",G:"var(--green)"};
+const STATUS_NAMES = {R:"RED",Y:"YEL",G:"GRN"};
+
+function showResults(data){
+  const area = document.getElementById("result-area");
+  area.classList.add("show");
+  const list = document.getElementById("findings-list");
+  list.innerHTML = "";
+
+  if(!data.findings || !data.findings.length){
+    list.innerHTML = "<p style='color:var(--muted)'>No automated findings. Manual review recommended.</p>";
+  } else {
+    data.findings.forEach(f => {
+      const c = STATUS_COLORS[f.status] || "var(--border)";
+      const card = document.createElement("div");
+      card.className = "finding-card";
+      card.style.borderLeftColor = c;
+      card.innerHTML = `
+        <div class="head">
+          <span class="badge" style="background:${c}">${f.status}</span>
+          <span>${f.component} — ${f.check}</span>
+        </div>
+        <p>${f.notes}</p>
+        ${f.suggested_parts.length ? `<p>Parts: ${f.suggested_parts.map(p=>`<code>${p}</code>`).join(", ")}</p>` : ""}
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  const link = document.getElementById("report-link");
+  if(data.report_url){
+    link.innerHTML = `<a href="${data.report_url}" target="_blank">&#128196; Open full offline report</a>
+      &nbsp;|&nbsp;
+      <a href="/evidence/${data.session_id}/findings.json" target="_blank">&#128203; findings.json</a>
+      &nbsp;|&nbsp;
+      <a href="/evidence/${data.session_id}/manifest.json" target="_blank">&#128194; manifest.json</a>`;
+  }
+  setStatus(`Analysis complete — ${data.findings.length} finding(s)`, "green");
+  area.scrollIntoView({behavior:"smooth"});
+}
+</script>
+</body>
+</html>
