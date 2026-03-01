@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>WheelGuard-982 — Cat Wheel Loader Inspector</title>
+<title>360° Tractor Inspection</title>
 <style>
 :root{
   --bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#e2e8f0;
@@ -18,195 +18,213 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 header{background:var(--surface);border-bottom:3px solid var(--accent);padding:1rem 1.25rem;
        display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:50}
 header .logo{font-size:1.6rem}
-header h1{font-size:1.2rem;font-weight:700;color:var(--accent)}
-header .sub{font-size:.75rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+header h1{font-size:1.15rem;font-weight:700;color:var(--accent)}
+header .sub{font-size:.7rem;color:var(--muted);margin-left:auto;text-align:right;line-height:1.3}
 
-main{max-width:640px;margin:0 auto;padding:1rem}
+main{max-width:720px;margin:0 auto;padding:1rem}
 section{background:var(--surface);border-radius:var(--radius);padding:1.15rem;margin-bottom:1rem}
-section h2{font-size:1rem;color:var(--accent);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+section h2{font-size:.95rem;color:var(--accent);margin-bottom:.65rem;display:flex;align-items:center;gap:.5rem}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:.5rem;
      border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;
-     cursor:pointer;transition:all .15s ease;min-height:56px;padding:.75rem 1.25rem;
-     touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.btn-pdf{background:#1d4ed8;color:#fff;width:100%;font-size:1.05rem}
-.btn-pdf:active{background:#1e40af;transform:scale(.98)}
-.btn-generate{background:var(--accent);color:#0f172a;width:100%;font-size:1.1rem;min-height:60px}
-.btn-generate:active{background:#d97706;transform:scale(.98)}
-.btn-generate:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.btn-photo{background:#0d9488;color:#fff}
-.btn-photo:active{background:#0f766e}
-.btn-audio{background:#7c3aed;color:#fff}
+     cursor:pointer;transition:all .12s ease;min-height:56px;padding:.75rem 1.25rem;
+     touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:100%}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-upload{background:#1d4ed8;color:#fff}
+.btn-run{background:var(--accent);color:#0f172a;min-height:60px;font-size:1.05rem}
+.btn-audio{background:#7c3aed;color:#fff;width:auto;min-height:48px;font-size:.9rem;padding:.5rem 1rem}
 .btn-audio.recording{background:var(--red);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
-.capture-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
+.upload-info{margin-top:.65rem;padding:.6rem .85rem;background:var(--bg);border-radius:8px;
+             font-size:.85rem;color:var(--green);display:none}
+.upload-info.show{display:block}
 
-.status-bar{display:flex;align-items:center;gap:.5rem;padding:.6rem 0;font-size:.88rem;color:var(--muted)}
+.status-bar{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;font-size:.85rem;color:var(--muted)}
 .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
-.file-name{margin-top:.5rem;padding:.5rem .75rem;background:var(--bg);border-radius:8px;
-           font-size:.85rem;color:var(--green);display:none;word-break:break-all}
-.file-name.show{display:block}
-
-.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:.5rem;margin-top:.5rem}
-.preview-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:2px solid var(--border)}
-.preview-grid .chip{background:var(--border);border-radius:6px;padding:.5rem;font-size:.75rem;
-                    color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center}
-
-#result-area{display:none}
-#result-area.show{display:block}
-#result-area a{color:var(--accent);text-decoration:underline}
-
-.finding-card{background:var(--bg);border-radius:10px;padding:.85rem 1rem;margin-bottom:.65rem;
-              border-left:4px solid var(--border)}
-.finding-card .head{display:flex;align-items:center;gap:.5rem;font-size:.9rem;font-weight:600;flex-wrap:wrap}
-.finding-card .head .badge{color:#fff;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:700}
-.finding-card .desc{font-size:.83rem;color:var(--muted);margin-top:.3rem}
-.finding-card .actions{margin-top:.4rem;font-size:.8rem;color:#94a3b8}
-.finding-card .actions li{margin-bottom:.15rem}
-
-.links-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
-.links-row a{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .85rem;
-             border-radius:8px;font-size:.85rem;font-weight:600;text-decoration:none;
-             background:var(--bg);color:var(--accent);border:1px solid var(--accent);min-height:44px}
-.links-row a:active{background:var(--accent);color:var(--bg)}
-
+input[type=file]{display:none}
 .spinner{display:inline-block;width:20px;height:20px;border:2.5px solid var(--border);
          border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.triage-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;
-            padding:.65rem .85rem;margin-top:.5rem}
-.triage-box h4{font-size:.85rem;color:var(--accent);margin-bottom:.3rem}
+/* Dashboard */
+#dashboard{display:none}
+#dashboard.show{display:block}
 
-input[type=file]{display:none}
+.video-wrap{position:relative;border-radius:8px;overflow:hidden;background:#000;margin-bottom:.75rem}
+.video-wrap video{width:100%;display:block}
+.markers-bar{height:28px;background:var(--border);border-radius:0 0 8px 8px;position:relative;cursor:pointer}
+.marker{position:absolute;top:2px;width:8px;height:24px;border-radius:3px;cursor:pointer;
+        transition:transform .1s}
+.marker:hover{transform:scaleY(1.3)}
+
+.filters{display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap}
+.filter-btn{padding:.35rem .75rem;border-radius:6px;border:1px solid var(--border);
+            background:transparent;color:var(--muted);font-size:.8rem;cursor:pointer;
+            transition:all .15s}
+.filter-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+
+.findings-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.findings-table th,.findings-table td{padding:.45rem .4rem;text-align:left;border-bottom:1px solid var(--border)}
+.findings-table th{color:var(--muted);font-weight:600;background:var(--bg);position:sticky;top:0}
+.findings-table tr{cursor:pointer;transition:background .1s}
+.findings-table tr:hover{background:rgba(251,191,36,.06)}
+.badge{color:#fff;padding:1px 7px;border-radius:4px;font-size:.72rem;font-weight:700}
+
+.evidence-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem;margin-top:.75rem}
+.evidence-card{background:var(--bg);border-radius:8px;overflow:hidden;cursor:pointer;
+               border:2px solid transparent;transition:border-color .15s}
+.evidence-card:hover{border-color:var(--accent)}
+.evidence-card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.evidence-card .caption{padding:.35rem .5rem;font-size:.75rem;color:var(--muted)}
+.evidence-card .caption strong{color:var(--text)}
+
+.coverage-bar{display:flex;gap:1rem;flex-wrap:wrap;margin:.5rem 0}
+.zone{font-size:.88rem;display:flex;align-items:center;gap:.3rem}
+.zone .icon{font-size:1.1rem}
+
+.summary-strip{display:flex;gap:.75rem;flex-wrap:wrap;margin:.5rem 0}
+.summary-chip{padding:.35rem .75rem;border-radius:6px;font-size:.85rem;font-weight:600}
+
+.links-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.links-row a{display:inline-flex;align-items:center;gap:.3rem;padding:.55rem .9rem;
+             border-radius:8px;font-size:.85rem;font-weight:600;text-decoration:none;
+             background:var(--bg);color:var(--accent);border:1px solid var(--accent);min-height:44px}
+.links-row a:active{background:var(--accent);color:var(--bg)}
 </style>
 </head>
 <body>
 
 <header>
   <span class="logo">&#128668;</span>
-  <h1>WheelGuard-982</h1>
-  <span class="sub">Cat 982 Wheel Loader</span>
+  <h1>360° Tractor Inspection</h1>
+  <span class="sub">Deterministic VLM Pipeline<br/>STUB_DEMO</span>
 </header>
 
 <main>
 
-<!-- Step 1: Upload PDF -->
-<section>
-  <h2>&#128196; Step 1 — Upload Inspection PDF</h2>
-  <button class="btn btn-pdf" id="btn-pdf" onclick="document.getElementById('file-pdf').click()">
-    Upload Inspection Report (PDF)
+<!-- Upload -->
+<section id="upload-section">
+  <h2>&#127909; Upload Walkaround Video</h2>
+  <button class="btn btn-upload" onclick="document.getElementById('file-video').click()">
+    Select 360° Video
   </button>
-  <input type="file" id="file-pdf" accept=".pdf,application/pdf" onchange="handlePdf(this)"/>
-  <div class="file-name" id="pdf-name"></div>
-  <div class="status-bar" id="status-pdf">
-    <span class="dot" style="background:var(--muted)"></span> No PDF uploaded yet
+  <input type="file" id="file-video" accept="video/*" onchange="handleVideo(this)"/>
+  <div class="upload-info" id="upload-info"></div>
+  <div style="margin-top:.6rem;display:flex;align-items:center;gap:.5rem">
+    <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()" style="display:none">
+      &#127908; Record Audio Note
+    </button>
+  </div>
+  <div class="status-bar" id="status">
+    <span class="dot" style="background:var(--muted)"></span> No video uploaded
   </div>
 </section>
 
-<!-- Step 2: Optional evidence -->
-<section>
-  <h2>&#128247; Step 2 — Additional Evidence (Optional)</h2>
-  <p style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem">
-    Capture photos or audio to supplement the PDF report.
-    For transmission noise triage, record 5–10 seconds near the transmission housing.
-  </p>
-  <div class="capture-row">
-    <button class="btn btn-photo" onclick="document.getElementById('file-photo').click()">
-      &#128248; Capture Photo
-    </button>
-    <button class="btn btn-audio" id="btn-audio" onclick="toggleAudio()">
-      &#127908; Record Audio
-    </button>
-  </div>
-  <input type="file" id="file-photo" accept="image/*" capture="environment" onchange="handlePhoto(this)"/>
-  <div class="preview-grid" id="previews"></div>
-  <div class="status-bar" id="status-evidence">
-    <span class="dot" style="background:var(--muted)"></span> No additional evidence
-  </div>
-</section>
-
-<!-- Step 3: Generate -->
-<section>
-  <h2>&#9881; Step 3 — Generate Report</h2>
-  <button class="btn btn-generate" id="btn-generate" onclick="generateReport()" disabled>
-    Generate Inspection Report
+<!-- Run Inspection -->
+<section id="run-section" style="display:none">
+  <button class="btn btn-run" id="btn-run" onclick="runInspection()">
+    Run Inspection
   </button>
 </section>
 
-<!-- Results -->
-<section id="result-area">
-  <h2>&#128203; Analysis Results</h2>
+<!-- Dashboard -->
+<div id="dashboard">
 
-  <div id="meta-summary"></div>
-
-  <h3 style="color:var(--accent);font-size:.95rem;margin:1rem 0 .5rem">Top Findings</h3>
-  <div id="findings-list"></div>
-
-  <div class="links-row" id="report-links"></div>
+<section>
+  <h2>&#128202; Inspection Summary</h2>
+  <div class="summary-strip" id="summary-strip"></div>
+  <div class="coverage-bar" id="coverage-bar"></div>
 </section>
+
+<section>
+  <h2>&#127909; Video Player</h2>
+  <div class="video-wrap">
+    <video id="video-player" controls></video>
+    <div class="markers-bar" id="markers-bar"></div>
+  </div>
+</section>
+
+<section>
+  <h2>&#128203; Findings</h2>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="ALL" onclick="setFilter('ALL',this)">All</button>
+    <button class="filter-btn" data-filter="FAIL" onclick="setFilter('FAIL',this)">FAIL only</button>
+    <button class="filter-btn" data-filter="MONITOR" onclick="setFilter('MONITOR',this)">MONITOR</button>
+    <button class="filter-btn" data-filter="PASS" onclick="setFilter('PASS',this)">PASS</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table class="findings-table">
+      <thead><tr>
+        <th>Status</th><th>Part</th><th>Confidence</th><th>Zone</th><th>Time</th><th>Part #</th>
+      </tr></thead>
+      <tbody id="findings-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>&#128248; Evidence Frames</h2>
+  <div class="evidence-grid" id="evidence-grid"></div>
+</section>
+
+<section>
+  <h2>&#128196; Export</h2>
+  <div class="links-row" id="export-links"></div>
+</section>
+
+</div><!-- /dashboard -->
 
 </main>
 
 <script>
 const API = location.origin;
-let sessionId = "";
-let pdfUploaded = false;
+let jobId = "";
+let allFindings = [];
+let currentFilter = "ALL";
+let videoDuration = 0;
 let mediaRecorder = null;
 let audioChunks = [];
 
-function setStatus(id, msg, color) {
-  const el = document.getElementById(id);
-  el.innerHTML = `<span class="dot" style="background:var(--${color})"></span> ${msg}`;
+const COLORS = {FAIL:"var(--red)", MONITOR:"var(--yellow)", PASS:"var(--green)"};
+
+function setStatus(msg, color) {
+  document.getElementById("status").innerHTML =
+    `<span class="dot" style="background:var(--${color})"></span> ${msg}`;
 }
 
-async function uploadFile(blob, filename, endpoint="/upload") {
+async function handleVideo(input) {
+  if (!input.files.length) return;
+  const file = input.files[0];
+  setStatus("Uploading & extracting frames…", "yellow");
+
   const fd = new FormData();
-  fd.append("file", blob, filename);
-  fd.append("session_id", sessionId);
-  const r = await fetch(`${API}${endpoint}`, {method:"POST", body:fd});
-  if (!r.ok) throw new Error(`Upload failed: ${r.status}`);
-  const j = await r.json();
-  if (!sessionId) sessionId = j.session_id;
-  return j;
-}
+  fd.append("file", file, file.name);
+  fd.append("fps", "2");
 
-async function handlePdf(input) {
-  if (!input.files.length) return;
-  const file = input.files[0];
-  if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
-
-  setStatus("status-pdf", "Uploading PDF…", "yellow");
   try {
-    const res = await uploadFile(file, file.name, "/upload_pdf");
-    pdfUploaded = true;
-    document.getElementById("pdf-name").textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB) — SHA-256: ${res.sha256.slice(0,16)}…`;
-    document.getElementById("pdf-name").classList.add("show");
-    document.getElementById("btn-generate").disabled = false;
-    setStatus("status-pdf", "PDF uploaded and hashed", "green");
-  } catch(e) {
-    setStatus("status-pdf", "Upload failed — try again", "red");
-    console.error(e);
-  }
-  input.value = "";
-}
+    const r = await fetch(`${API}/upload_video`, {method:"POST", body:fd});
+    if (!r.ok) throw new Error(`Upload failed: ${r.status}`);
+    const data = await r.json();
+    jobId = data.job_id;
+    videoDuration = data.duration_sec;
 
-async function handlePhoto(input) {
-  if (!input.files.length) return;
-  const file = input.files[0];
-  if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
+    document.getElementById("upload-info").innerHTML =
+      `<strong>${data.filename}</strong><br/>
+       Duration: ${data.duration_sec.toFixed(1)}s &middot; Frames extracted: ${data.total_frames} &middot;
+       Job: <code>${data.job_id}</code>`;
+    document.getElementById("upload-info").classList.add("show");
+    document.getElementById("run-section").style.display = "block";
+    document.getElementById("btn-audio").style.display = "inline-flex";
 
-  setStatus("status-evidence", "Uploading photo…", "yellow");
-  try {
-    const res = await uploadFile(file, file.name);
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-    document.getElementById("previews").appendChild(img);
-    setStatus("status-evidence", `Photo uploaded (${res.sha256.slice(0,8)}…)`, "green");
+    const player = document.getElementById("video-player");
+    player.src = `${API}/jobs/${jobId}/video`;
+
+    setStatus("Video processed — ready to inspect", "green");
   } catch(e) {
-    setStatus("status-evidence", "Photo upload failed", "red");
+    setStatus(`Upload failed: ${e.message}`, "red");
     console.error(e);
   }
   input.value = "";
@@ -219,146 +237,158 @@ function toggleAudio() {
     return;
   }
   navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
-    const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
-    mediaRecorder = new MediaRecorder(stream, {mimeType});
+    const mime = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
+    mediaRecorder = new MediaRecorder(stream, {mimeType: mime});
     audioChunks = [];
     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.onstop = async () => {
       stream.getTracks().forEach(t => t.stop());
       btn.classList.remove("recording");
-      btn.innerHTML = "&#127908; Record Audio";
-      const blob = new Blob(audioChunks, {type: mimeType});
-      const ext = mimeType.includes("webm") ? ".webm" : ".m4a";
-      if (!sessionId) sessionId = crypto.randomUUID().replace(/-/g,"").slice(0,12);
-      setStatus("status-evidence", "Uploading audio…", "yellow");
+      btn.innerHTML = "&#127908; Record Audio Note";
+      const blob = new Blob(audioChunks, {type: mime});
+      const ext = mime.includes("webm") ? ".webm" : ".m4a";
+      const fd = new FormData();
+      fd.append("file", blob, `note_${Date.now()}${ext}`);
+      fd.append("job_id", jobId);
       try {
-        const res = await uploadFile(blob, `transmission_audio_${Date.now()}${ext}`);
-        const chip = document.createElement("div");
-        chip.className = "chip";
-        chip.textContent = `Audio ${ext}`;
-        document.getElementById("previews").appendChild(chip);
-        setStatus("status-evidence", `Audio uploaded (${res.sha256.slice(0,8)}…)`, "green");
-      } catch(e) {
-        setStatus("status-evidence", "Audio upload failed", "red");
-        console.error(e);
-      }
+        await fetch(`${API}/upload_audio`, {method:"POST", body:fd});
+        setStatus("Audio note saved", "green");
+      } catch(e) { console.error(e); }
     };
     mediaRecorder.start();
     btn.classList.add("recording");
-    btn.innerHTML = "&#9899; Recording… (tap to stop)";
+    btn.innerHTML = "&#9899; Recording…";
     setTimeout(() => {
-      if (mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
+      if (mediaRecorder?.state === "recording") mediaRecorder.stop();
     }, 10000);
-  }).catch(e => {
-    setStatus("status-evidence", "Microphone access denied", "red");
-    console.error(e);
-  });
+  }).catch(() => setStatus("Mic access denied", "red"));
 }
 
-const STATUS_COLORS = {R:"var(--red)", Y:"var(--yellow)", G:"var(--green)"};
-
-async function generateReport() {
-  const btn = document.getElementById("btn-generate");
+async function runInspection() {
+  const btn = document.getElementById("btn-run");
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Analysing PDF…';
+  btn.innerHTML = '<span class="spinner"></span> Analysing…';
 
   try {
-    const r = await fetch(`${API}/infer_from_pdf`, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({session_id: sessionId}),
-    });
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error(err.detail || `Server error: ${r.status}`);
-    }
+    const fd = new FormData();
+    fd.append("job_id", jobId);
+    const r = await fetch(`${API}/infer`, {method:"POST", body:fd});
+    if (!r.ok) throw new Error((await r.json()).detail || r.status);
     const data = await r.json();
-    showResults(data);
+    allFindings = data.findings;
+    renderDashboard(data);
   } catch(e) {
-    setStatus("status-pdf", `Analysis failed: ${e.message}`, "red");
+    setStatus(`Analysis failed: ${e.message}`, "red");
     console.error(e);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = "Generate Inspection Report";
+    btn.innerHTML = "Run Inspection";
   }
 }
 
-function showResults(data) {
-  const area = document.getElementById("result-area");
-  area.classList.add("show");
+function renderDashboard(data) {
+  document.getElementById("dashboard").classList.add("show");
+  document.getElementById("upload-section").style.display = "none";
+  document.getElementById("run-section").style.display = "none";
 
-  // Meta summary
-  const meta = data.meta || {};
-  document.getElementById("meta-summary").innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;font-size:.85rem;
-                background:var(--bg);padding:.75rem;border-radius:8px;margin-bottom:.5rem">
-      <span style="color:var(--muted)">Model</span><strong>${meta.model || "982"}</strong>
-      <span style="color:var(--muted)">Serial</span><span>${meta.serial || "—"}</span>
-      <span style="color:var(--muted)">SMU</span><span>${meta.smu_hours || 0} hours</span>
-      <span style="color:var(--muted)">Inspector</span><span>${meta.inspector || "—"}</span>
-      <span style="color:var(--muted)">Location</span><span>${meta.location || "—"}</span>
-      <span style="color:var(--muted)">Completed</span><span>${meta.completed_on || "—"}</span>
+  // Summary
+  const s = data.summary;
+  document.getElementById("summary-strip").innerHTML = `
+    <div class="summary-chip" style="background:${s.overall==="FAIL"?"var(--red)":s.overall==="MONITOR"?"var(--yellow)":"var(--green)"};color:#fff">
+      Overall: ${s.overall}
     </div>
-    <p style="font-size:.83rem;color:var(--muted)">
-      ${data.checklist_items?.length || 0} checklist items parsed &middot;
-      ${data.findings?.length || 0} actionable findings
-      ${data.parse_errors?.length ? ` &middot; ${data.parse_errors.length} parse warning(s)` : ""}
-    </p>`;
+    <div class="summary-chip" style="background:var(--red);color:#fff">${s.fail_count} FAIL</div>
+    <div class="summary-chip" style="background:var(--yellow);color:#000">${s.monitor_count} MONITOR</div>
+    <div class="summary-chip" style="background:var(--green);color:#fff">${s.pass_count} PASS</div>
+    <div class="summary-chip" style="background:var(--border);color:var(--muted)">${s.total_findings} total</div>`;
 
-  // Findings (RED first)
-  const list = document.getElementById("findings-list");
-  list.innerHTML = "";
-  const findings = data.findings || [];
-  if (!findings.length) {
-    list.innerHTML = '<p style="color:var(--muted)">All checks passed — no actionable findings.</p>';
-  } else {
-    findings.forEach(f => {
-      const c = STATUS_COLORS[f.severity] || "var(--border)";
-      const card = document.createElement("div");
-      card.className = "finding-card";
-      card.style.borderLeftColor = c;
+  // Coverage
+  const cov = data.coverage;
+  document.getElementById("coverage-bar").innerHTML = ["front","rear","left","right"].map(z => {
+    const ok = cov.zones_detected.some(d => d === z);
+    return `<span class="zone">
+      <span class="icon" style="color:${ok?"var(--green)":"var(--red)"}">${ok?"&#9745;":"&#9746;"}</span>
+      ${z.toUpperCase()}
+    </span>`;
+  }).join("") + `<span class="zone" style="color:var(--muted)">${cov.coverage_pct.toFixed(0)}% coverage</span>`;
 
-      let actionsHtml = "";
-      if (f.recommended_actions && f.recommended_actions.length) {
-        actionsHtml = '<ul class="actions">' + f.recommended_actions.map(a => `<li>${a}</li>`).join("") + "</ul>";
-      }
+  // Markers on video bar
+  const bar = document.getElementById("markers-bar");
+  bar.innerHTML = "";
+  const dur = videoDuration || 1;
+  data.findings.forEach(f => {
+    const pct = (f.evidence.timestamp_sec / dur * 100).toFixed(2);
+    const m = document.createElement("div");
+    m.className = "marker";
+    m.style.left = `calc(${pct}% - 4px)`;
+    m.style.background = COLORS[f.condition] || "var(--border)";
+    m.title = `${f.part_name} (${f.condition}) @ ${f.evidence.timestamp_sec.toFixed(1)}s`;
+    m.onclick = () => seekTo(f.evidence.timestamp_sec);
+    bar.appendChild(m);
+  });
 
-      let partsHtml = "";
-      if (f.parts_search_terms && f.parts_search_terms.length) {
-        partsHtml = '<div style="margin-top:.3rem">' + f.parts_search_terms.map(t => {
-          const url = `https://parts.cat.com/en/catcorp/search?q=${encodeURIComponent(t)}`;
-          return `<a href="${url}" target="_blank" style="font-size:.78rem;color:var(--accent);
-                   margin-right:.5rem;text-decoration:underline">${t}</a>`;
-        }).join("") + '</div>';
-      }
+  renderFindings(data.findings);
+  renderEvidence(data.findings);
 
-      card.innerHTML = `
-        <div class="head">
-          <span class="badge" style="background:${c}">${f.severity}</span>
-          <span>${f.title}</span>
-        </div>
-        <p class="desc">${f.description}</p>
-        ${actionsHtml}
-        ${partsHtml}`;
-      list.appendChild(card);
-    });
-  }
+  // Export links
+  document.getElementById("export-links").innerHTML = `
+    <a href="/jobs/${data.job_id}/report.html" target="_blank">&#128196; HTML Report</a>
+    <a href="/jobs/${data.job_id}/report.pdf" target="_blank">&#128462; PDF Report</a>
+    <a href="/jobs/${data.job_id}/findings.json" target="_blank">&#128203; findings.json</a>`;
+}
 
-  // Report links
-  const links = document.getElementById("report-links");
-  links.innerHTML = "";
-  if (data.report_url) {
-    links.innerHTML = `
-      <a href="${data.report_url}" target="_blank">&#128196; Full Report</a>
-      <a href="/evidence/${data.session_id}/findings.json" target="_blank">&#128203; findings.json</a>
-      <a href="/evidence/${data.session_id}/manifest.json" target="_blank">&#128194; manifest.json</a>
-      <a href="/evidence/${data.session_id}/report.pdf" target="_blank">&#128462; Original PDF</a>`;
-  }
+function renderFindings(findings) {
+  const tbody = document.getElementById("findings-tbody");
+  tbody.innerHTML = "";
+  const filtered = currentFilter === "ALL" ? findings : findings.filter(f => f.condition === currentFilter);
+  filtered.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.onclick = () => seekTo(f.evidence.timestamp_sec);
+    const c = COLORS[f.condition] || "var(--border)";
+    const pn = f.replacement_part ? f.replacement_part.part_number : "—";
+    tr.innerHTML = `
+      <td><span class="badge" style="background:${c}">${f.condition}</span></td>
+      <td>${f.part_name}</td>
+      <td>${(f.confidence*100).toFixed(0)}%</td>
+      <td>${f.coverage_zone}</td>
+      <td>${f.evidence.timestamp_sec.toFixed(1)}s</td>
+      <td><code style="font-size:.75rem">${pn}</code></td>`;
+    tbody.appendChild(tr);
+  });
+}
 
-  setStatus("status-pdf",
-    `Analysis complete — ${findings.filter(f=>f.severity==="R").length} critical, ${findings.filter(f=>f.severity==="Y").length} monitor`,
-    findings.some(f=>f.severity==="R") ? "red" : findings.some(f=>f.severity==="Y") ? "yellow" : "green");
-  area.scrollIntoView({behavior:"smooth"});
+function renderEvidence(findings) {
+  const grid = document.getElementById("evidence-grid");
+  grid.innerHTML = "";
+  const nonPass = findings.filter(f => f.condition !== "PASS");
+  (nonPass.length ? nonPass : findings.slice(0, 8)).forEach(f => {
+    const card = document.createElement("div");
+    card.className = "evidence-card";
+    card.onclick = () => seekTo(f.evidence.timestamp_sec);
+    const c = COLORS[f.condition] || "var(--border)";
+    card.innerHTML = `
+      <img src="/jobs/${jobId}/frames/${f.evidence.thumbnail_filename}" alt="${f.part_name}"/>
+      <div class="caption">
+        <span class="badge" style="background:${c};font-size:.65rem">${f.condition}</span>
+        <strong>${f.part_name}</strong><br/>
+        ${f.evidence.timestamp_sec.toFixed(1)}s &middot; ${(f.confidence*100).toFixed(0)}%
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderFindings(allFindings);
+}
+
+function seekTo(sec) {
+  const v = document.getElementById("video-player");
+  v.currentTime = sec;
+  v.play().catch(() => {});
+  v.scrollIntoView({behavior:"smooth", block:"center"});
 }
 </script>
 </body>

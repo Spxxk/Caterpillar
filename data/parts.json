@@ -1,0 +1,194 @@
+[
+  {
+    "part_key": "front_glass",
+    "display_name": "Front Tempered Glass (Windshield)",
+    "part_number": "CAT-FG-3920",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=front+windshield+glass+cab",
+    "category": "cab",
+    "fitment_score": 0.85
+  },
+  {
+    "part_key": "rear_glass",
+    "display_name": "Rear Window Glass",
+    "part_number": "CAT-RG-3921",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=rear+window+glass+cab",
+    "category": "cab",
+    "fitment_score": 0.85
+  },
+  {
+    "part_key": "right_step_belt",
+    "display_name": "Right Rear Step Belt / Anti-Slip Tread",
+    "part_number": "CAT-SB-2210R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=step+belt+anti-slip+tread",
+    "category": "access",
+    "fitment_score": 0.80
+  },
+  {
+    "part_key": "left_step_belt",
+    "display_name": "Left Rear Step Belt / Anti-Slip Tread",
+    "part_number": "CAT-SB-2210L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=step+belt+anti-slip+tread",
+    "category": "access",
+    "fitment_score": 0.80
+  },
+  {
+    "part_key": "hood_panel",
+    "display_name": "Hood / Bonnet Panel",
+    "part_number": "CAT-HD-5540",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=hood+bonnet+panel",
+    "category": "body",
+    "fitment_score": 0.82
+  },
+  {
+    "part_key": "left_fender",
+    "display_name": "Left Front Fender",
+    "part_number": "CAT-FD-1180L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=front+fender+left",
+    "category": "body",
+    "fitment_score": 0.78
+  },
+  {
+    "part_key": "right_fender",
+    "display_name": "Right Front Fender",
+    "part_number": "CAT-FD-1180R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=front+fender+right",
+    "category": "body",
+    "fitment_score": 0.78
+  },
+  {
+    "part_key": "left_headlight",
+    "display_name": "Left Headlight Assembly",
+    "part_number": "CAT-HL-7710L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=headlight+assembly+left",
+    "category": "electrical",
+    "fitment_score": 0.90
+  },
+  {
+    "part_key": "right_headlight",
+    "display_name": "Right Headlight Assembly",
+    "part_number": "CAT-HL-7710R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=headlight+assembly+right",
+    "category": "electrical",
+    "fitment_score": 0.90
+  },
+  {
+    "part_key": "left_mirror",
+    "display_name": "Left Side Mirror",
+    "part_number": "CAT-MR-4420L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=side+mirror+left",
+    "category": "cab",
+    "fitment_score": 0.88
+  },
+  {
+    "part_key": "right_mirror",
+    "display_name": "Right Side Mirror",
+    "part_number": "CAT-MR-4420R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=side+mirror+right",
+    "category": "cab",
+    "fitment_score": 0.88
+  },
+  {
+    "part_key": "front_left_tire",
+    "display_name": "Front Left Tire",
+    "part_number": "CAT-TR-6600FL",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=front+tire+agricultural",
+    "category": "undercarriage",
+    "fitment_score": 0.75
+  },
+  {
+    "part_key": "front_right_tire",
+    "display_name": "Front Right Tire",
+    "part_number": "CAT-TR-6600FR",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=front+tire+agricultural",
+    "category": "undercarriage",
+    "fitment_score": 0.75
+  },
+  {
+    "part_key": "rear_left_tire",
+    "display_name": "Rear Left Tire",
+    "part_number": "CAT-TR-6601RL",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=rear+tire+agricultural",
+    "category": "undercarriage",
+    "fitment_score": 0.75
+  },
+  {
+    "part_key": "rear_right_tire",
+    "display_name": "Rear Right Tire",
+    "part_number": "CAT-TR-6601RR",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=rear+tire+agricultural",
+    "category": "undercarriage",
+    "fitment_score": 0.75
+  },
+  {
+    "part_key": "hydraulic_hose_left",
+    "display_name": "Left Hydraulic Hose Assembly",
+    "part_number": "CAT-HH-8850L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=hydraulic+hose+assembly",
+    "category": "hydraulics",
+    "fitment_score": 0.72
+  },
+  {
+    "part_key": "hydraulic_hose_right",
+    "display_name": "Right Hydraulic Hose Assembly",
+    "part_number": "CAT-HH-8850R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=hydraulic+hose+assembly",
+    "category": "hydraulics",
+    "fitment_score": 0.72
+  },
+  {
+    "part_key": "three_point_hitch",
+    "display_name": "3-Point Hitch Assembly",
+    "part_number": "CAT-3P-9920",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=three+point+hitch",
+    "category": "implements",
+    "fitment_score": 0.70
+  },
+  {
+    "part_key": "exhaust_stack",
+    "display_name": "Exhaust Stack / Muffler",
+    "part_number": "CAT-EX-3310",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=exhaust+muffler+stack",
+    "category": "engine",
+    "fitment_score": 0.82
+  },
+  {
+    "part_key": "radiator_grille",
+    "display_name": "Radiator Grille / Screen",
+    "part_number": "CAT-RG-1150",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=radiator+grille+screen",
+    "category": "engine",
+    "fitment_score": 0.84
+  },
+  {
+    "part_key": "cab_door",
+    "display_name": "Cab Door Assembly",
+    "part_number": "CAT-CD-5570",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=cab+door+assembly",
+    "category": "cab",
+    "fitment_score": 0.80
+  },
+  {
+    "part_key": "tail_light_left",
+    "display_name": "Left Tail Light",
+    "part_number": "CAT-TL-7720L",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=tail+light+assembly+left",
+    "category": "electrical",
+    "fitment_score": 0.90
+  },
+  {
+    "part_key": "tail_light_right",
+    "display_name": "Right Tail Light",
+    "part_number": "CAT-TL-7720R",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=tail+light+assembly+right",
+    "category": "electrical",
+    "fitment_score": 0.90
+  },
+  {
+    "part_key": "pto_shield",
+    "display_name": "PTO Shield / Guard",
+    "part_number": "CAT-PTO-4400",
+    "purchase_url": "https://parts.cat.com/en/catcorp/search?q=PTO+shield+guard",
+    "category": "implements",
+    "fitment_score": 0.76
+  }
+]
